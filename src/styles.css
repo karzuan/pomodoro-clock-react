@@ -27,3 +27,16 @@ code {
   text-align: center;
   font-size: 270%;
 }
+
+.display{
+  margin: 10px 0 10px;
+}
+
+#session-length, #break-length {
+  margin: 5px 6px 0 6px;
+  font-size: large;
+}
+
+#break-label, #session-label {
+  margin-bottom: 6px;
+}
