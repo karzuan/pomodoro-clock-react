@@ -3,15 +3,33 @@ import ReactDOM from 'react-dom';
 import './styles.css';
 import Display from './Display';
 import IncrDecr from './IncrDecr';
-import PlayStopReset from './PlayStopReset';
+import Timer from './Timer';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(
-  <React.StrictMode>
+class Carkas extends React.Component {
 
-      <div class="container">
-        <div class="row">
-          <div class="col">
+
+  /*  Idea for handler: 
+      Fetch ticTacHandler with session time as an arg. After it reaches "00:00" fetch it again with
+      the Brake time and start all over and over again.
+  */
+
+    /* 
+      1. Reveive string of number and convert it to "MM:SS"
+      2. Substruct a second each second, untill the time is gone
+    
+  
+    make the minutes go down one by one and continuously update the state
+       of the current time on the display
+    */
+
+  render() {
+    return(
+      <React.StrictMode>
+
+      <div className="container">
+        <div className="row">
+          <div className="col">
           <IncrDecr 
               name="Break Length"
               labelId="break-label"
@@ -21,7 +39,7 @@ ReactDOM.render(
               decrId="break-decrement"
               />
           </div>
-          <div class="col">
+          <div className="col">
           <IncrDecr 
               labelId="session-label"
               name="Session Length"
@@ -34,23 +52,29 @@ ReactDOM.render(
       </div>
     </div>
 
-    <div class="container-md display">
+    <div className="container-md display">
       <Display />
     </div>
     
 
-      <div class="container">
-        <div class="row">
-          <div class="col-1"></div>
-          <div class="col-10">
+      <div className="container">
+        <div className="row">
+          <div className="col-2"></div>
+          <div className="col-8">
       
-           <PlayStopReset />
+           <Timer />
 
           </div>
-          <div class="col-1"></div>
+          <div className="col-2"></div>
         </div>
     </div>
-  </React.StrictMode>,
+  </React.StrictMode>
+    )
+  }
+}
+
+ReactDOM.render(
+  <Carkas />,
   document.getElementById('main-container')
 );
 
