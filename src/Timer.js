@@ -2,74 +2,65 @@ import React from "react";
 import "./styles.css";
 
 class Timer extends React.Component {
-
   constructor(props){
     super(props);
     this.state = {
       isRunning: false,
-      currentTime: 0,
-      timeNow: 0,
       elapsedTime: 0,
-      breakInterval: 300000,
-      sessionInterval: 1500000,
-      currentMode: "session"
+      previousTime: 0
     }
   }
 
-  componentDidMount () {
-    setInterval(this.ticTac, 1000);
+  componentDidMount() {
+    // call back tic tac
+    this.intervalID = setInterval(this.ticTac, 100);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalID);
   }
 
   ticTac = () => {
-    if (this.state.isRunning ) { 
-      var now = Date.now();
-      this.setState({
-        timeNow: now,
-        elapsedTime: this.state.elapsedTime + (this.state.timeNow - now )
-      })
-      
-    }
-  }
-
-  startStopHandler = () => {
     if(this.state.isRunning){
+      const now = Date.now();
+      //console.log('tic tac ...')
+      //debugger
       this.setState({
-        isRunning: false
-      });
-    } else {
-      this.setState({
-        isRunning: true
-      });
+        elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
+        previousTime: now
+      })
     }
-
   }
 
+  playStopHandler = () => {
+    if (!this.state.isRunning) {
+      const now = Date.now();
+      this.setState({
+        isRunning: true,
+        previousTime: now
+      })
+      } else {
+        this.setState({
+          isRunning: false
+        })
+      }
+    }
 
-  // countDownHandler = (time) => {
-  //   var minutes = time;
-  //   var restime = '';
-  //   if (minutes < 10) { minutes = "0" + minutes }
-  //   var seconds = "00";
-  //   restime = `${minutes}:${seconds}`;
-  //   if( minutes > 0 && seconds !== "00" )
-  //   return restime;
-  // }
-
-
-  // ticTacHandler = (mins) => {
-  //   var minutes = mins;
-  //   console.log ( this.countDownHandler(9));
-  //   setInterval( () => {
-  //     minutes = minutes - 1;
-  //     console.log(minutes);
-  //   }, 1000 );
-  // }
+    resetHandler = () => {
+      // reset button
+      this.setState({
+        isRunning: false,
+        previousTime: 0,
+        elapsedTime: 0,
+        breakTime: 5,
+        sessionTime: 25
+      })
+    }
 
   render(){
-
-    let iconStartStop;
-    if (this.state.isRunning) {
-      iconStartStop = <svg
+    var playStopIcon = '';
+    if ( this.state.isRunning){
+      playStopIcon = <svg
       className="bi bi-stop"
       width="3em"
       height="3em"
@@ -81,9 +72,9 @@ class Timer extends React.Component {
         fillRule="evenodd"
         d="M3.5 5A1.5 1.5 0 0 1 5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5zM5 4.5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5V5a.5.5 0 0 0-.5-.5H5z"
       />
-    </svg>;
+    </svg>
     } else {
-      iconStartStop =  <svg
+      playStopIcon = <svg
       className="bi bi-play"
       width="3em"
       height="3em"
@@ -95,14 +86,14 @@ class Timer extends React.Component {
         fillRule="evenodd"
         d="M10.804 8L5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z"
       />
-    </svg>;
+    </svg>
     }
 
   return (
     <React.Fragment>
-      <button id="start_stop" onClick={this.startStopHandler} type="button" className="btn btn-light">{iconStartStop}</button>
+      <button id="start_stop" onClick={this.playStopHandler} type="button" className="btn btn-light">{playStopIcon}</button>
 
-      <button id="reset" type="button" className="btn btn-light">
+      <button id="reset" onClick={this.resetHandler} type="button" className="btn btn-light">
       <svg
         className="bi bi-arrow-clockwise"
         width="3em"

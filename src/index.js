@@ -8,6 +8,12 @@ import * as serviceWorker from './serviceWorker';
 
 class Carkas extends React.Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      displayVal: "24:59"
+    }
+  }
 
   /*  Idea for handler: 
       Fetch ticTacHandler with session time as an arg. After it reaches "00:00" fetch it again with
@@ -53,7 +59,7 @@ class Carkas extends React.Component {
     </div>
 
     <div className="container-md display">
-      <Display />
+      <Display displayVal = {this.state.displayVal} />
     </div>
     
 

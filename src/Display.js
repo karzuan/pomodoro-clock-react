@@ -11,7 +11,7 @@ function Display(props) {
         id="time-left"
         className="form-control form-control-lg"
         type="text"
-        placeholder="25:00"
+        placeholder={props.displayVal}
         readOnly
       />
     </React.Fragment>
