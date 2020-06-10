@@ -11,23 +11,47 @@ class Carkas extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      displayVal: "24:59"
+      displayVal: "25:00",
+      breakLength: 5,
+      sessionLength: 25,
+      mode: "session"
     }
   }
 
-  /*  Idea for handler: 
-      Fetch ticTacHandler with session time as an arg. After it reaches "00:00" fetch it again with
-      the Brake time and start all over and over again.
-  */
+  incrDecrHandler = (e, string) => {
+    if ( string === "Break Length") {
+    if(e) {
+      console.log("increment break");
+      this.setState({
+        breakLength: this.state.breakLength + 1
+      })
 
-    /* 
-      1. Reveive string of number and convert it to "MM:SS"
-      2. Substruct a second each second, untill the time is gone
-    
-  
-    make the minutes go down one by one and continuously update the state
-       of the current time on the display
-    */
+    } else {
+      console.log("decrement break");
+      this.setState({
+        breakLength: this.state.breakLength - 1
+      })
+    }
+  }
+  if ( string === "Session Length") {
+    if(e) {
+      console.log("increment session");
+      this.setState({
+        sessionLength: this.state.sessionLength + 1
+      })
+      } else {
+      console.log("decrement session");
+      this.setState({
+        sessionLength: this.state.sessionLength - 1
+      })
+    }
+  }
+  }
+
+  toMins = (ms) => {
+    return Math.floor(ms/60000);
+  }
+
 
   render() {
     return(
@@ -41,8 +65,9 @@ class Carkas extends React.Component {
               labelId="break-label"
               incrId="break-increment"
               timerId="break-length"
-              timeThis="5"
+              timeThis= { this.state.breakLength }
               decrId="break-decrement"
+              incrDecrHandler = {this.incrDecrHandler}
               />
           </div>
           <div className="col">
@@ -51,8 +76,9 @@ class Carkas extends React.Component {
               name="Session Length"
               incrId="session-increment"
               timerId="session-length"
-              timeThis="25"
+              timeThis= { this.state.sessionLength }
               decrId="session-decrement"
+              incrDecrHandler = {this.incrDecrHandler}
               />
             </div>
       </div>
