@@ -7,13 +7,12 @@ function Display(props) {
       <label id="timer-label" htmlFor="time-left">
         Session
       </label>
-      <input
+      <div
         id="time-left"
         className="form-control form-control-lg"
         type="text"
-        placeholder={props.displayVal}
         readOnly
-      />
+      >{props.displayVal}</div>
     </React.Fragment>
   );
 }

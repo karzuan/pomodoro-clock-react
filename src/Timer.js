@@ -4,62 +4,18 @@ import "./styles.css";
 class Timer extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      isRunning: false,
-      elapsedTime: 0,
-      previousTime: 0
-    }
   }
 
-  componentDidMount() {
-    // call back tic tac
-    this.intervalID = setInterval(this.ticTac, 100);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.intervalID);
-  }
-
-  ticTac = () => {
-    if(this.state.isRunning){
-      const now = Date.now();
-      //console.log('tic tac ...')
-      //debugger
-      this.setState({
-        elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
-        previousTime: now
-      })
-    }
-  }
-
-  playStopHandler = () => {
-    if (!this.state.isRunning) {
-      const now = Date.now();
-      this.setState({
-        isRunning: true,
-        previousTime: now
-      })
-      } else {
-        this.setState({
-          isRunning: false
-        })
-      }
-    }
-
-    resetHandler = () => {
-      // reset button
-      this.setState({
-        isRunning: false,
-        previousTime: 0,
-        elapsedTime: 0,
-        breakTime: 5,
-        sessionTime: 25
-      })
-    }
+  
 
   render(){
+
+    const playStopHandler = this.props.playStopHandler;
+    const resetHandler = this.props.resetHandler;
+    const isRunning = this.props.isRunning;
+
     var playStopIcon = '';
-    if ( this.state.isRunning){
+    if (isRunning){
       playStopIcon = <svg
       className="bi bi-stop"
       width="3em"
@@ -91,9 +47,9 @@ class Timer extends React.Component {
 
   return (
     <React.Fragment>
-      <button id="start_stop" onClick={this.playStopHandler} type="button" className="btn btn-light">{playStopIcon}</button>
+      <button id="start_stop" onClick={playStopHandler} type="button" className="btn btn-light">{playStopIcon}</button>
 
-      <button id="reset" onClick={this.resetHandler} type="button" className="btn btn-light">
+      <button id="reset" onClick={resetHandler} type="button" className="btn btn-light">
       <svg
         className="bi bi-arrow-clockwise"
         width="3em"
