@@ -5,7 +5,7 @@ function Display(props) {
   return (
     <React.Fragment>
       <label id="timer-label" htmlFor="time-left">
-        Session
+        {props.mode}
       </label>
       <div
         id="time-left"

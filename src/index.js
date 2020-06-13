@@ -37,16 +37,23 @@ ticTac = () => {
     const now = Date.now();
     //console.log('tic tac ...')
     //debugger
-    if (this.state.timeLeft < 0 ) { this.switchModeHandler() }
+    if ( this.state.timeLeft < 0 ) {
+      this.switchModeHandler();
+
+    }
     this.setState({
       //elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
       previousTime: now,
-      timeLeft: this.state.timeLeft - (now - this.state.previousTime)
+      timeLeft: this.state.timeLeft - 
+      6*
+      (now - this.state.previousTime)
     })
   }
 }
 
 switchModeHandler = () => {
+
+  this.makeNoise();
   // switch corrent mode and set a new time left
   var nextMode = "";
   var timeLeft = 0;
@@ -62,6 +69,10 @@ switchModeHandler = () => {
     mode: nextMode,
     timeLeft: timeLeft
   })
+}
+
+makeNoise = () => {
+    document.getElementById("beep").play();
 }
 
 playStopHandler = () => {
@@ -92,40 +103,48 @@ playStopHandler = () => {
 
 /* Handler of increment/decrement buttons for Break and Session modes */
   incrDecrHandler = (e, string) => {
-    if ( string === "Break Length" && this.state.breakLength > 1 && this.state.breakLength < 60 ) {
+    if ( string === "Break Length" && this.state.breakLength >= 1 && this.state.breakLength <= 60 ) {
       var sessionLength = this.state.sessionLength * 60000;
     if(e) {
       //console.log("increment break");
+      if (this.state.breakLength !== 60) {
       this.setState({
         breakLength: this.state.breakLength + 1,
         mode: "session",
         timeLeft: sessionLength
       })
+    }
 
     } else {
       //console.log("decrement break");
-      this.setState({
-        breakLength: this.state.breakLength - 1,
-        mode: "session",
-        timeLeft: sessionLength
-      })
+      if (this.state.breakLength !== 1) {
+          this.setState({
+            breakLength: this.state.breakLength - 1,
+            mode: "session",
+            timeLeft: sessionLength
+          })
+      }
     }
   }
-  if ( string === "Session Length" && this.state.sessionLength > 1 && this.state.sessionLength < 60 ) {
+  if ( string === "Session Length" && this.state.sessionLength >= 1 && this.state.sessionLength <= 60 ) {
     if(e) {
-      console.log("increment session");
-      this.setState({
-        sessionLength: this.state.sessionLength + 1,
-        mode: "session",
-        timeLeft: ( this.state.sessionLength + 1 ) * 60000
-      })
+      //console.log("increment session");
+      if (this.state.sessionLength !== 60) {
+        this.setState({
+          sessionLength: this.state.sessionLength + 1,
+          mode: "session",
+          timeLeft: ( this.state.sessionLength + 1 ) * 60000
+        })
+      }
       } else {
-      console.log("decrement session");
-      this.setState({
-        sessionLength: this.state.sessionLength - 1,
-        mode: "session",
-        timeLeft: ( this.state.sessionLength - 1 ) * 60000
-      })
+      //console.log("decrement session");
+      if (this.state.sessionLength !== 1) {
+        this.setState({
+          sessionLength: this.state.sessionLength - 1,
+          mode: "session",
+          timeLeft: ( this.state.sessionLength - 1 ) * 60000
+        })
+      }
     }
   }
   }
@@ -133,8 +152,27 @@ playStopHandler = () => {
   millisToMinutesAndSeconds = (millis) => {
       var minutes = Math.floor(millis / 60000);
       var seconds = ((millis % 60000) / 1000).toFixed(0);
+      var correctFormat = "";
       if ( seconds === "60" ) { seconds = "59"}
-      return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+      if ( millis < 0 ) { 
+        seconds = "0";
+        minutes = "00";
+      }
+      correctFormat = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+      // if ( correctFormat === "00:00" ) {
+      //   debugger;
+      //   var nextMode = "";
+      //   if (this.state.mode === "session") {
+      //     nextMode = "break";
+      //   } else {
+      //     nextMode = "session";
+      //   }
+      //   this.setState({
+      //     //elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
+      //     modeShow: nextMode
+      //   })
+      //  }
+      return correctFormat;
   }
 
   render() {
@@ -169,10 +207,13 @@ playStopHandler = () => {
     </div>
 
     <div className="container-md display">
-      <Display displayVal = {this.millisToMinutesAndSeconds(this.state.timeLeft)} />
+      <Display 
+      mode = { this.state.mode }
+      displayVal = {this.millisToMinutesAndSeconds(this.state.timeLeft)} />
     </div>
-    
 
+    <audio className="clip" id="beep" src="http://soundbible.com/mp3/Cow%20And%20Bell-SoundBible.com-1243222141.mp3" />
+   
       <div className="container">
         <div className="row">
           <div className="col-2"></div>
