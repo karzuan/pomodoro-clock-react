@@ -13,19 +13,20 @@ class Carkas extends React.Component {
     this.state = {
       //displayVal: "25:00",
       //elapsedTime: 0,
-      breakLength: 5,
-      sessionLength: 25,
+      breakLength: 2,
+      sessionLength: 2,
       mode: "session",
       isRunning: false,
       previousTime: 0,
-      timeLeft: 1500000
+      timeLeft: 5000
     }
   }
+
 
 /* Functions transferred from Timer.js for controlling of TicTac, Reset and etc. */
 componentDidMount() {
   // call back tic tac
-  this.intervalID = setInterval(this.ticTac, 100);
+  this.intervalID = setInterval(this.ticTac, 1000);
 }
 
 componentWillUnmount() {
@@ -37,23 +38,30 @@ ticTac = () => {
     const now = Date.now();
     //console.log('tic tac ...')
     //debugger
-    if ( this.state.timeLeft < 0 ) {
+    if ( this.state.timeLeft < 1000 ) {
+      this.makeNoise();
+    }
+    if ( this.state.timeLeft < 0 ) { 
+      //debugger
+      
+      //this.setState({ isRunning: false });
       this.switchModeHandler();
 
+    } else {
+      this.setState({
+        //elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
+        previousTime: now,
+        timeLeft: this.state.timeLeft - 
+        //6*
+        (now - this.state.previousTime)
+      })
     }
-    this.setState({
-      //elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
-      previousTime: now,
-      timeLeft: this.state.timeLeft - 
-      6*
-      (now - this.state.previousTime)
-    })
   }
 }
 
 switchModeHandler = () => {
-
-  this.makeNoise();
+  //debugger
+  const now = Date.now();
   // switch corrent mode and set a new time left
   var nextMode = "";
   var timeLeft = 0;
@@ -66,13 +74,15 @@ switchModeHandler = () => {
   }
   this.setState({
     //elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
+    previousTime: now,
     mode: nextMode,
-    timeLeft: timeLeft
+    timeLeft: timeLeft,
+    //isRunning: true
   })
 }
 
 makeNoise = () => {
-    document.getElementById("beep").play();
+  document.getElementById("beep").play();
 }
 
 playStopHandler = () => {
@@ -91,6 +101,10 @@ playStopHandler = () => {
 
   resetHandler = () => {
     // reset button
+    document.getElementById("beep").pause();
+    document.getElementById("beep").currentTime = 0;
+    //componentWillUnmount();
+
     this.setState({
       isRunning: false,
       previousTime: 0,
@@ -158,20 +172,9 @@ playStopHandler = () => {
         seconds = "0";
         minutes = "00";
       }
+      if ( minutes === 0) minutes = "00";
       correctFormat = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-      // if ( correctFormat === "00:00" ) {
-      //   debugger;
-      //   var nextMode = "";
-      //   if (this.state.mode === "session") {
-      //     nextMode = "break";
-      //   } else {
-      //     nextMode = "session";
-      //   }
-      //   this.setState({
-      //     //elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
-      //     modeShow: nextMode
-      //   })
-      //  }
+  
       return correctFormat;
   }
 
