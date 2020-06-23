@@ -13,8 +13,8 @@ class Carkas extends React.Component {
     this.state = {
       //displayVal: "25:00",
       //elapsedTime: 0,
-      breakLength: 2,
-      sessionLength: 2,
+      breakLength: 5,
+      sessionLength: 25,
       mode: "session",
       isRunning: false,
       previousTime: 0,
@@ -38,11 +38,11 @@ ticTac = () => {
     const now = Date.now();
     //console.log('tic tac ...')
     //debugger
-    if ( this.state.timeLeft < 1000 ) {
-      this.makeNoise();
-    }
+    
     if ( this.state.timeLeft < 0 ) { 
       //debugger
+
+      
       
       //this.setState({ isRunning: false });
       this.switchModeHandler();
@@ -60,6 +60,7 @@ ticTac = () => {
 }
 
 switchModeHandler = () => {
+  
   //debugger
   const now = Date.now();
   // switch corrent mode and set a new time left
@@ -108,6 +109,7 @@ playStopHandler = () => {
     this.setState({
       isRunning: false,
       previousTime: 0,
+      mode: "session",
       elapsedTime: 0,
       breakLength: 5,
       sessionLength: 25,
@@ -166,15 +168,21 @@ playStopHandler = () => {
   millisToMinutesAndSeconds = (millis) => {
       var minutes = Math.floor(millis / 60000);
       var seconds = ((millis % 60000) / 1000).toFixed(0);
+      //console.log( "time: " + minutes + ":" + seconds );
+      if ( minutes == 0 && seconds == 0 || minutes == -1 && seconds == -0 ) {
+        this.makeNoise();
+        console.log('YAY');
+      }
       var correctFormat = "";
       if ( seconds === "60" ) { seconds = "59"}
       if ( millis < 0 ) { 
         seconds = "0";
         minutes = "00";
       }
+      if ( minutes < 10 && minutes > 0 ) minutes = "0" + minutes;
       if ( minutes === 0) minutes = "00";
       correctFormat = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-  
+      
       return correctFormat;
   }
 
