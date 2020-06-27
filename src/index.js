@@ -18,7 +18,7 @@ class Carkas extends React.Component {
       mode: "session",
       isRunning: false,
       previousTime: 0,
-      timeLeft: 5000
+      timeLeft: 1500000
     }
   }
 
@@ -171,7 +171,7 @@ playStopHandler = () => {
       //console.log( "time: " + minutes + ":" + seconds );
       if ( minutes == 0 && seconds == 0 || minutes == -1 && seconds == -0 ) {
         this.makeNoise();
-        console.log('YAY');
+        //console.log('YAY');
       }
       var correctFormat = "";
       if ( seconds === "60" ) { seconds = "59"}
